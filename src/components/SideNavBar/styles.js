@@ -7,6 +7,7 @@ export const MainContainer = styled.div`
   position: relative;
   transition: transform 0.3s ease-in-out;
   transform: translateX(0);
+
   @media (max-width: 1024px) {
     width: 40vw;
   }
@@ -101,8 +102,8 @@ export const CreateNew = styled.p`
 
 export const HamburgerButton = styled.button`
   position: fixed;
-  top: 1rem;
-  left: 1rem;
+  top: 1rem; 
+  left: 1.2rem; 
   z-index: 20;
   background: none;
   border: none;
@@ -111,8 +112,7 @@ export const HamburgerButton = styled.button`
   cursor: pointer;
 
   @media (min-width: 769px) {
-    display: none; 
-  }
+    display: none;
 
   @media (max-width: 768px) {
     display: block;
@@ -134,3 +134,4 @@ export const CloseIcon = styled.p`
   top: 1rem;
   right: 1rem;
 `;
+
