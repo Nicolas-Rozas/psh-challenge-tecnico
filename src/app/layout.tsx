@@ -1,9 +1,11 @@
-import { Montserrat } from "next/font/google";
-import StyledComponentsRegistry from "./registry";
+// Importa Head de next/document para manejar los meta tags
+import Head from 'next/head';
+import { Montserrat } from 'next/font/google';
+import StyledComponentsRegistry from './registry';
 
 const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
 });
 
 export default function RootLayout({
@@ -13,6 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html style={{ margin: 0, padding: 0 }}>
+      <Head>
+        <title>PSH ChatApp</title>
+        <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap`} />
+      </Head>
       <body
         className={montserrat.className}
         style={{
@@ -22,7 +28,7 @@ export default function RootLayout({
       >
         <div
           style={{
-            boxSizing: "border-box",
+            boxSizing: 'border-box',
             margin: 0,
           }}
         >

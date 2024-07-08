@@ -79,7 +79,7 @@ const SideNavBar = ({
   };
 
   const toggleMenu = () => {
-    if (window.innerWidth <= 768) {
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
       setMenuOpen(!menuOpen);
     }
   };
@@ -88,14 +88,19 @@ const SideNavBar = ({
     <>
       <HamburgerButton
         onClick={toggleMenu}
-        style={{ display: window.innerWidth <= 768 ? "block" : "none" }}
+        style={{
+          display:
+            typeof window !== "undefined" && window.innerWidth <= 768
+              ? "block"
+              : "none",
+        }}
       >
         {!menuOpen && <MenuIcon>☰</MenuIcon>}
       </HamburgerButton>
       <MainContainer
         style={{
           transform:
-            window.innerWidth <= 768
+            typeof window !== "undefined" && window.innerWidth <= 768
               ? menuOpen
                 ? "translateX(0)"
                 : "translateX(-100%)"
