@@ -9,6 +9,7 @@ export const MainContainer = styled.div`
   @media (max-width: 1024px) {
     grid-template-columns: 40vw 1fr;
       overflow-x: hidden;
+      overflow-y: hidden;
   }
 `;
 
