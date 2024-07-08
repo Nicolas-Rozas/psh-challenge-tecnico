@@ -6,8 +6,8 @@ export const MainContainer = styled.div`
   grid-template-rows: 100vh;
   background-color: #e9e9e9;
   overflow-x: hidden;
-    @media (max-width: 1024px) {
-  grid-template-columns: 40vw 1fr;
+  @media (max-width: 1024px) {
+    grid-template-columns: 40vw 1fr;
   }
 `;
 
@@ -37,13 +37,12 @@ export const ChatContainer = styled.div`
   flex-direction: column;
   overflow-y: auto;
   margin-left: 50px;
-  margin-right: 10%;
+  padding-right: 10%;
 
   @media (max-width: 768px) {
     margin-left: 10px;
-  }  margin-right: 5%;
-
-
+    margin-right: 5%;
+  }
 `;
 
 export const InputContainer = styled.div`
@@ -59,7 +58,7 @@ export const InputContainer = styled.div`
   padding-left: 50px;
 
   @media (max-width: 768px) {
-    padding-left: 10px; /
+    padding-left: 10px;
   }
 
   form {
@@ -69,21 +68,20 @@ export const InputContainer = styled.div`
   }
 
   input {
-    flex: .9;
+    flex: 0.9;
     border: 2px solid #f4f4f4;
     border-radius: 12px;
-    padding: 8px 12px; 
+    padding: 8px 12px;
     margin-right: 10px;
-    height: 36px; 
+    height: 36px;
     background-color: #fbfbfb;
     color: #777777;
-    font-size: 14px; 
+    font-size: 16px;
     font-weight: 600;
 
     @media (max-width: 768px) {
-      font-size: 12px; 
-          padding: 8px 12px; 
-
+      font-size: 16px;
+      padding: 8px 12px;
     }
   }
 
@@ -100,7 +98,7 @@ export const InputContainer = styled.div`
 
     @media (max-width: 768px) {
       width: 80px;
-      font-size: 12px; 
+      font-size: 12px;
     }
   }
 `;

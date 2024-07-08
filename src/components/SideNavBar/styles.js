@@ -5,9 +5,8 @@ export const MainContainer = styled.div`
   background-color: #191a1e;
   width: 30vw;
   position: relative;
-  transform: translateX(0);
   transition: transform 0.3s ease-in-out;
-
+  transform: translateX(0);
   @media (max-width: 1024px) {
     width: 40vw;
   }
@@ -107,12 +106,16 @@ export const HamburgerButton = styled.button`
   z-index: 20;
   background: none;
   border: none;
-  color: white;
+  color: black;
   font-size: 2rem;
   cursor: pointer;
 
   @media (min-width: 769px) {
-    display: none;
+    display: none; 
+  }
+
+  @media (max-width: 768px) {
+    display: block;
   }
 `;
 

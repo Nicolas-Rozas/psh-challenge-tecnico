@@ -17,7 +17,7 @@ import { Props, UserDetails } from "@/types/chatTypes";
 
 interface SideNavBarProps extends Props {
   initialChats?: UserDetails[];
-  onSelectUser: (user: UserDetails) => void; // Tipo explícito para onSelectUser
+  onSelectUser: (user: UserDetails) => void; 
   lastSentMessage?: string;
   menuOpen?: boolean;
 }
@@ -88,12 +88,7 @@ const SideNavBar = ({
     <>
       <HamburgerButton
         onClick={toggleMenu}
-        style={{
-          display:
-            typeof window !== "undefined" && window.innerWidth <= 768
-              ? "block"
-              : "none",
-        }}
+       
       >
         {!menuOpen && <MenuIcon>☰</MenuIcon>}
       </HamburgerButton>
