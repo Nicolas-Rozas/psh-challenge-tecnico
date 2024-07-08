@@ -14,6 +14,10 @@ const Container = styled.div<TalkBubbleProps>`
   padding: 5px 0;
   position: relative;
   margin: 5px 0;
+  @media (max-width: 768px) {
+  justify-content: flex-start};
+  }
+
 `;
 
 const TalkBubble = styled.div<TalkBubbleProps>`

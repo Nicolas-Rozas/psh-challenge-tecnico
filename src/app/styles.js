@@ -8,6 +8,7 @@ export const MainContainer = styled.div`
   overflow-x: hidden;
   @media (max-width: 1024px) {
     grid-template-columns: 40vw 1fr;
+      overflow-x: hidden;
   }
 `;
 
@@ -20,7 +21,7 @@ export const SideNavBarContainer = styled.div`
 export const ChatAreaContainer = styled.div`
   grid-column: 2 / span 1;
   grid-row: 1 / span 1;
-  overflow-y: auto;
+  overflow-y: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -28,6 +29,7 @@ export const ChatAreaContainer = styled.div`
 
   @media (max-width: 768px) {
     grid-column: 1 / span 2;
+      overflow-y: hidden;
   }
 `;
 
@@ -40,6 +42,7 @@ export const ChatContainer = styled.div`
   padding-right: 10%;
 
   @media (max-width: 768px) {
+    overflow-x: hidden;
     margin-left: 10px;
     margin-right: 5%;
   }
