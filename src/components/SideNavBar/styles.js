@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const MainContainer = styled.nav`
+export const MainContainer = styled.div`
   height: 100%;
   background-color: #191a1e;
   width: 30vw;

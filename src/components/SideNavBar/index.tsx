@@ -1,3 +1,4 @@
+// SideNavBar.jsx
 import React, { useState } from "react";
 import {
   MainContainer,
@@ -11,10 +12,12 @@ import {
 import Image from "next/image";
 import ErrorToast from "../ErrorToast";
 import ChatCard from "../ChatCard";
-import { Props, UserDetails } from "@/types/chatTypes";
 import useRandomUser from "@/Hooks/useRandomUser";
+import { Props, UserDetails } from "@/types/chatTypes";
 
 interface SideNavBarProps extends Props {
+  initialChats?: UserDetails[];
+  onSelectUser: (user: UserDetails) => void; // Tipo explícito para onSelectUser
   lastSentMessage?: string;
   menuOpen?: boolean;
 }
@@ -24,7 +27,7 @@ const SideNavBar = ({
   onSelectUser,
   lastSentMessage,
 }: SideNavBarProps) => {
-  const [chats, setChats] = useState<UserDetails[]>(initialChats.slice(0, 3));
+  const [chats, setChats] = useState(initialChats.slice(0, 3));
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserDetails | null>(null);
@@ -76,21 +79,35 @@ const SideNavBar = ({
   };
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    if (window.innerWidth <= 768) {
+      setMenuOpen(!menuOpen);
+    }
   };
 
   return (
     <>
-      <HamburgerButton onClick={toggleMenu}>
+      <HamburgerButton
+        onClick={toggleMenu}
+        style={{ display: window.innerWidth <= 768 ? "block" : "none" }}
+      >
         {!menuOpen && <MenuIcon>☰</MenuIcon>}
       </HamburgerButton>
-      <MainContainer menuOpen={menuOpen}>
+      <MainContainer
+        style={{
+          transform:
+            window.innerWidth <= 768
+              ? menuOpen
+                ? "translateX(0)"
+                : "translateX(-100%)"
+              : "translateX(0)",
+        }}
+      >
         <TopSection>
           <Image src="/psh_brand.png" alt="logo" width={80} height={80} />
           <Title>React Chat</Title>
         </TopSection>
         <BottomSection>
-          {chats.map((chat) => (
+          {chats.map((chat: UserDetails) => (
             <ChatCard
               key={chat.id}
               name={chat.name}
@@ -101,6 +118,7 @@ const SideNavBar = ({
               onClick={() => handleUserSelect(chat)}
             />
           ))}
+
           <CreateNew onClick={handleAddNewUser}>+ Create Now</CreateNew>
           {showToast && (
             <ErrorToast message={toastMessage} onClose={closeToast} />
