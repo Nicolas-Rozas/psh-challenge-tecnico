@@ -1,5 +1,4 @@
-// SideNavBar.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MainContainer,
   TopSection,
@@ -15,30 +14,32 @@ import ChatCard from "../ChatCard";
 import useRandomUser from "@/Hooks/useRandomUser";
 import { Props, UserDetails } from "@/types/chatTypes";
 
+// Definición de las props del componente SideNavBar
 interface SideNavBarProps extends Props {
-  initialChats?: UserDetails[];
-  onSelectUser: (user: UserDetails) => void; 
+  initialChats: UserDetails[];
+  onSelectUser: (user: UserDetails) => void;
   lastSentMessage?: string;
   menuOpen?: boolean;
 }
 
-const SideNavBar = ({
-  initialChats = [],
-  onSelectUser,
-  lastSentMessage,
-}: SideNavBarProps) => {
-  const [chats, setChats] = useState(initialChats.slice(0, 3));
+const SideNavBar = ({ initialChats, onSelectUser }: SideNavBarProps) => {
+  // Estados del componente
+  const [chats, setChats] = useState<UserDetails[]>(initialChats);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserDetails | null>(null);
   const [menuOpen, setMenuOpen] = useState(true);
+
+  // Hook personalizado para añadir usuarios aleatorios
   const { addUser } = useRandomUser();
 
+  // Función para añadir un nuevo usuario
   const handleAddNewUser = async () => {
     try {
+      // Verifica si se ha alcanzado el límite de usuarios
       if (chats.length >= 5) {
         setShowToast(true);
-        setToastMessage("¡No se pueden agregar más usuarios!");
+        setToastMessage("Limite de usuarios!");
         setTimeout(() => setShowToast(false), 2000);
         return;
       }
@@ -46,14 +47,16 @@ const SideNavBar = ({
       const newUser = await addUser();
 
       if (newUser) {
+        // Verifica si el usuario ya existe
         const existingUser = chats.find((user) => user.name === newUser.name);
-
         if (!existingUser) {
+          // Añade el nuevo usuario si no existe
           setChats((prevChats) => [...prevChats, newUser]);
           setShowToast(true);
           setToastMessage("¡Nuevo usuario agregado!");
           setTimeout(() => setShowToast(false), 2000);
         } else {
+          // Muestra un mensaje si el usuario ya existe
           setShowToast(true);
           setToastMessage("¡Usuario duplicado!");
           setTimeout(() => setShowToast(false), 2000);
@@ -67,17 +70,25 @@ const SideNavBar = ({
     }
   };
 
+  // Función para manejar la selección de un usuario
   const handleUserSelect = (user: UserDetails) => {
     setSelectedUser(user);
     onSelectUser(user);
     setMenuOpen(false);
   };
 
+  // Efecto para actualizar los chats 
+  useEffect(() => {
+    setChats(initialChats);
+  }, [initialChats]);
+
+  // Función para cerrar el toast
   const closeToast = () => {
     setShowToast(false);
     setToastMessage("");
   };
 
+  // Función para alternar el menú en responsive 
   const toggleMenu = () => {
     if (typeof window !== "undefined" && window.innerWidth <= 768) {
       setMenuOpen(!menuOpen);
@@ -86,10 +97,7 @@ const SideNavBar = ({
 
   return (
     <>
-      <HamburgerButton
-        onClick={toggleMenu}
-       
-      >
+      <HamburgerButton onClick={toggleMenu}>
         {!menuOpen && <MenuIcon>☰</MenuIcon>}
       </HamburgerButton>
       <MainContainer
@@ -111,10 +119,10 @@ const SideNavBar = ({
             <ChatCard
               key={chat.id}
               name={chat.name}
-              lastMessage={lastSentMessage ?? chat.lastMessage ?? ""}
+              lastMessage={chat.lastMessage || ""}
               time={chat.time}
               imageUrl={chat.imageUrl}
-              selected={selectedUser && selectedUser.name === chat.name}
+              selected={selectedUser?.id === chat.id}
               onClick={() => handleUserSelect(chat)}
             />
           ))}

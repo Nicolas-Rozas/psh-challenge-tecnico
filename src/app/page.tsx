@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   MainContainer,
   SideNavBarContainer,
@@ -12,67 +11,97 @@ import Header from "../components/Header";
 import SideNavBar from "../components/SideNavBar";
 import { UserDetails } from "@/types/chatTypes";
 import ChatBubble from "../components/ChatBubble";
-import useMessage from "@/Hooks/useMessage";
 import { initialChats } from "./mockData";
+import Input from "@/components/Input";
 
 const Home = () => {
-  const [selectedUser, setSelectedUser] = useState<UserDetails | null>(null); // Estado para almacenar el usuario seleccionado
-  const chatEndRef = useRef<HTMLDivElement>(null); // Referencia al final del área de chat para scroll
-  const { messageText, setMessageText } = useMessage(); // Hook personalizado para manejar el texto del mensaje
+  // Estado para almacenar la lista de chats
+  const [chats, setChats] = useState(initialChats);
 
-  // Función para manejar la selección de usuario
+
+  // Estado para almacenar el ID del usuario seleccionado actualmente
+  const [selectedUserId, setSelectedUserId] = useState<string | number | null>(null);
+
+  // Función para manejar la selección de un usuario de la barra de navegación
   const handleSelectUser = (user: UserDetails) => {
-    setSelectedUser(user);
+    // Actualiza el ID del usuario seleccionado
+    setSelectedUserId(user.id);
+    
+    // Actualiza el estado de los chats
+    setChats((prevChats) => {
+      // Verifica si el usuario ya existe en la lista de chats
+      if (!prevChats.some((chat) => chat.id === user.id)) {
+        // Si el usuario no existe, se añade a la lista de chats
+        // con un array de mensajes vacío y campos inicializados
+        return [...prevChats, {
+          id: user.id,
+          name: user.name,
+          role: user.role,
+          imageUrl: user.imageUrl,
+          messages: [],
+          lastMessage: "",
+          time: ""
+        }];
+      }
+      // Si el usuario ya existe, no se  modifica la lista de chats
+      return prevChats;
+    });
   };
 
-  // Efecto para hacer scroll hacia abajo cuando se selecciona un nuevo usuario
+  // Efecto para hacer scroll automático en el contenedor de chat
+  // Se ejecuta cada vez que cambia el usuario seleccionado o los mensajes
   useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    const chatContainer = document.getElementById("chat-container");
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
-  }, [selectedUser]);
+  }, [selectedUserId, chats]);
 
-  // Función para manejar cambios en el texto del mensaje
-  const handleMessageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageText(event.target.value);
-  };
-
-  // Función para manejar el envío de mensajes
-  const handleMessageSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!selectedUser || !messageText.trim()) {
-      return; // Evitar enviar mensajes vacíos
+  // Función para manejar el envío de un nuevo mensaje
+  const handleMessageSubmit = (message: string) => {
+    // Verifica que haya un usuario seleccionado y que el mensaje no esté vacío
+    if (!selectedUserId || !message.trim()) {
+      return;
     }
 
-    // Crear un nuevo mensaje
+    // Crea un nuevo objeto de mensaje con la hora actual
     const newMessage = {
-      id: selectedUser.messages.length + 1,
-      text: messageText,
+      id: Date.now(), // Usa el timestamp como ID único
+      text: message,
       time: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
-      isSent: true,
+      isSent: true, // Indica que este mensaje fue enviado por el usuario actual
     };
 
-    // Actualizar los mensajes del usuario seleccionado
-    setSelectedUser((prevUser) => {
-      if (!prevUser) return null;
-      const updatedMessages = [...prevUser.messages, newMessage];
-      return { ...prevUser, messages: updatedMessages };
+    // Actualiza el estado de los chats
+    setChats((prevChats) => {
+      return prevChats.map((chat) => {
+        if (chat.id === selectedUserId) {
+          return {
+            ...chat,
+            messages: [...(chat.messages), newMessage],
+            lastMessage: message, 
+            time: newMessage.time, 
+          };
+        }
+        return chat;
+      });
     });
-
-    // Limpiar el campo de texto del mensaje después de enviar
-    setMessageText("");
   };
+
+  // Obtiene el usuario seleccionado
+  const selectedUser = useMemo(
+    () => chats.find((chat) => chat.id === selectedUserId),
+    [chats, selectedUserId]
+  );
+
 
   return (
     <MainContainer>
       <SideNavBarContainer>
-        <SideNavBar
-          initialChats={initialChats}
-          onSelectUser={handleSelectUser}
-        />
+        <SideNavBar initialChats={chats} onSelectUser={handleSelectUser} />
       </SideNavBarContainer>
       {selectedUser && (
         <ChatAreaContainer>
@@ -81,29 +110,25 @@ const Home = () => {
             role={selectedUser.role}
             imageUrl={selectedUser.imageUrl}
           />
-          <ChatContainer>
-            {selectedUser.messages.map((msg) => (
-              <ChatBubble
-                key={msg.id}
-                message={msg.text}
-                time={msg.time}
-                isSent={msg.isSent}
-                imageUrl={selectedUser.imageUrl}
-              />
-            ))}
-            {/* Referencia al final del área de chat para scroll */}
-            <div ref={chatEndRef} />
+          <ChatContainer id="chat-container">
+            { selectedUser.messages.length > 0 ? (
+              selectedUser.messages.map((msg) => (
+                <ChatBubble
+                  key={msg.id}
+                  message={msg.text}
+                  time={msg.time}
+                  isSent={msg.isSent}
+                  imageUrl={selectedUser.imageUrl}
+                />
+              ))
+            ) : (
+              <p style={{height:"100%",width:'100%',justifyContent:'center',alignItems:'center',display:'flex'}}>
+                Inicia una nueva conversacion!
+              </p>
+            )}
           </ChatContainer>
           <InputContainer>
-            <form onSubmit={handleMessageSubmit}>
-              <input
-                type="text"
-                value={messageText}
-                onChange={handleMessageChange}
-                placeholder="Type your message..."
-              />
-              <button type="submit">SEND</button>
-            </form>
+            <Input onSubmit={handleMessageSubmit} />
           </InputContainer>
         </ChatAreaContainer>
       )}

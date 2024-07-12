@@ -1,5 +1,6 @@
 import { UserDetails } from "@/types/chatTypes";
 import { useState } from "react";
+import axios from "axios";
 
 const useRandomUser = () => {
   const [randomUser, setRandomUser] = useState<UserDetails | null>(null);
@@ -7,27 +8,21 @@ const useRandomUser = () => {
 
   const addUser = async () => {
     try {
-      const response = await fetch("https://randomuser.me/api/");
+      const response = await axios.get("https://randomuser.me/api/");
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok.");
-      }
-
-      const data = await response.json();
-
-      if (data.results.length === 0) {
+      if (!response.data || response.data.results.length === 0) {
         throw new Error("No results found in API response.");
       }
 
       const newUser: UserDetails = {
         id: Date.now().toString(),
-        name: `${data.results[0].name.first} ${data.results[0].name.last}`,
+        name: `${response.data.results[0].name.first} ${response.data.results[0].name.last}`,
         lastMessage: "New user added",
         time: new Date().toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "numeric",
         }),
-        imageUrl: data.results[0].picture.large,
+        imageUrl: response.data.results[0].picture.large,
         role: "Sin rol",
         messages: [],
       };

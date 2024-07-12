@@ -109,13 +109,15 @@ export const HamburgerButton = styled.button`
   border: none;
   color: black;
   font-size: 2rem;
-  cursor: pointer;
-
   @media (min-width: 769px) {
     display: none;
+      font-size: 1.4rem;
+
 
   @media (max-width: 768px) {
     display: block;
+          font-size: 1.4rem;
+
   }
 `;
 
@@ -124,6 +126,8 @@ export const MenuIcon = styled.span`
   color: black;
   cursor: pointer;
   position: absolute;
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
 `;
 
 export const CloseIcon = styled.p`
@@ -134,4 +138,3 @@ export const CloseIcon = styled.p`
   top: 1rem;
   right: 1rem;
 `;
-

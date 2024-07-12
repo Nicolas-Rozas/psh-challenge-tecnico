@@ -20,8 +20,8 @@ export const AvatarImage = styled(Image)`
   margin-right: 50px;
   @media (max-width: 768px) {
     margin-right: 20px;
-    height: 70px;
-    width: 70px;
+    height: 50px;
+    width: 50px;
   }
 `;
 

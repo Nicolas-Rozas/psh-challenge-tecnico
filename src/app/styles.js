@@ -42,10 +42,31 @@ export const ChatContainer = styled.div`
   margin-left: 50px;
   padding-right: 10%;
 
+   &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
   @media (max-width: 768px) {
     overflow-x: hidden;
     margin-left: 10px;
     margin-right: 5%;
+  }
+
+  @media (max-width: 1024px) {
+    margin-left: 10px;
+    margin-right: 0;
   }
 `;
 
@@ -75,9 +96,9 @@ export const InputContainer = styled.div`
     flex: 0.9;
     border: 2px solid #f4f4f4;
     border-radius: 12px;
-    padding: 8px 12px;
+    padding: 0px 12px;
     margin-right: 10px;
-    height: 36px;
+    height: 40px;
     background-color: #fbfbfb;
     color: #777777;
     font-size: 16px;
@@ -98,7 +119,7 @@ export const InputContainer = styled.div`
     cursor: pointer;
     font-weight: bold;
     width: 100px;
-    height: 36px;
+    height: 40px;
 
     @media (max-width: 768px) {
       width: 80px;

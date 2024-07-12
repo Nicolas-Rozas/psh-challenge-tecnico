@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { Montserrat } from 'next/font/google';
 import StyledComponentsRegistry from './registry';
 
@@ -7,17 +6,17 @@ const montserrat = Montserrat({
   weight: ['400', '500', '700'],
 });
 
+export const metadata = {
+  title: 'PSH ChatApp',
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html  style={{ margin: 0, padding: 0 }}>
-      <Head>
-        <title>PSH ChatApp</title>
-        <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap`} />
-      </Head>
+    <html lang="en" style={{ margin: 0, padding: 0 }}>
       <body
         className={montserrat.className}
         style={{
